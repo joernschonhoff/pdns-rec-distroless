@@ -3,33 +3,57 @@
   "extends": [
     "config:recommended"
   ],
+  "pinDigests": true,
+  "automerge": false,
+  "prConcurrentLimit": 2,
+  "semanticCommits": "enabled",
+  "semanticCommitType": "chore",
+  "semanticCommitScope": "deps",
+  "commitMessageAction": "update",
+  "commitMessageTopic": "{{depName}}",
+  "commitMessageExtra": "to {{newVersion}}",
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["/^VERSION$/"],
-      "matchStrings": ["^(?<currentValue>\\d+\\.\\d+\\.\\d+)$"],
-      "datasourceTemplate": "custom.powerdns-recursor-releases",
-      "depNameTemplate": "pdns-recursor",
-      "versioningTemplate": "semver"
+      "description": "Extract pdns-recursor version from VERSION file",
+      "managerFilePatterns": [
+        "/^VERSION$/"
+      ],
+      "matchStrings": [
+        "^(?<currentValue>\\d+\\.\\d+\\.\\d+)$"
+      ],
+      "datasourceTemplate": "custom.pdns-recursor-releases",
+      "depNameTemplate": "pdns-recursor"
     }
   ],
   "customDatasources": {
-    "powerdns-recursor-releases": {
+    "pdns-recursor-releases": {
       "defaultRegistryUrlTemplate": "https://downloads.powerdns.com/releases/",
-      "format": "html",
-      "transformTemplates": [
-        "{ \"releases\": $sort($distinct($match($string(body), /pdns-recursor-(\\d+\\.\\d+\\.\\d+)\\.tar\\.xz/).groups[0])).{ \"version\": $ }[] }"
-      ]
+      "format": "html"
     }
   },
   "packageRules": [
     {
-      "matchDatasources": ["custom.powerdns-recursor-releases"],
-      "matchPackageNames": ["pdns-recursor"],
-      "groupName": "PowerDNS Recursor",
-      "semanticCommits": "enabled",
-      "semanticCommitType": "chore",
-      "semanticCommitScope": "deps"
+      "matchUpdateTypes": ["minor", "patch", "pin"],
+      "automerge": true
+    },
+    {
+      "description": "pdns-recursor version - update VERSION file",
+      "matchFileNames": [
+        "VERSION"
+      ],
+      "matchDatasources": [
+        "custom.pdns-recursor-releases"
+      ],
+      "extractVersion": "^pdns-recursor-(?<version>\\d+\\.\\d+\\.\\d+)\\.tar\\.xz$",
+      "commitMessageTopic": "pdns-recursor",
+      "groupName": "pdns-recursor"
+    },
+    {
+      "description": "Disable automatic updates for Docker image digests",
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["digest"],
+      "enabled": false
     }
   ]
 }
