@@ -1,0 +1,22 @@
+# Git
+.git/
+.gitignore
+.gitlab-ci.yml
+
+# Docs
+README.md
+LICENSE
+
+# Editors / OS
+.DS_Store
+.vscode/
+.idea/
+
+# Local build artifacts
+quiche_lib/
+*.tar
+*.log
+
+# CI / tooling config not needed inside the build context
+renovate.json
+VERSION

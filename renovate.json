@@ -1,0 +1,59 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "pinDigests": true,
+  "automerge": false,
+  "prConcurrentLimit": 2,
+  "semanticCommits": "enabled",
+  "semanticCommitType": "chore",
+  "semanticCommitScope": "deps",
+  "commitMessageAction": "update",
+  "commitMessageTopic": "{{depName}}",
+  "commitMessageExtra": "to {{newVersion}}",
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Extract pdns-recursor version from VERSION file",
+      "managerFilePatterns": [
+        "/^VERSION$/"
+      ],
+      "matchStrings": [
+        "^(?<currentValue>\\d+\\.\\d+\\.\\d+)$"
+      ],
+      "datasourceTemplate": "custom.pdns-recursor-releases",
+      "depNameTemplate": "pdns-recursor"
+    }
+  ],
+  "customDatasources": {
+    "pdns-recursor-releases": {
+      "defaultRegistryUrlTemplate": "https://downloads.powerdns.com/releases/",
+      "format": "html"
+    }
+  },
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin"],
+      "automerge": true
+    },
+    {
+      "description": "pdns-recursor version - update VERSION file",
+      "matchFileNames": [
+        "VERSION"
+      ],
+      "matchDatasources": [
+        "custom.pdns-recursor-releases"
+      ],
+      "extractVersion": "^pdns-recursor-(?<version>\\d+\\.\\d+\\.\\d+)\\.tar\\.xz$",
+      "commitMessageTopic": "pdns-recursor",
+      "groupName": "pdns-recursor"
+    },
+    {
+      "description": "Disable automatic updates for Docker image digests",
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["digest"],
+      "enabled": false
+    }
+  ]
+}
