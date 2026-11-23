@@ -8,9 +8,9 @@ stages:
 
 .build-template:
   stage: build
-  image: docker:29.9.3@sha256:08a98015fce594af7c382883bea080ea206de74402a95da9dc52b6428c8cd121
+  image: docker:29.10.0@sha256:4bbc7223f81db790097c6dea42fb93e05b8fead4f0431fbe6ccaba6e8473201c
   services:
-    - docker:29.9.3-dind@sha256:08a98015fce594af7c382883bea080ea206de74402a95da9dc52b6428c8cd121
+    - docker:29.10.0-dind@sha256:4bbc7223f81db790097c6dea42fb93e05b8fead4f0431fbe6ccaba6e8473201c
   before_script:
     # Auth to pull private base images referenced in the Dockerfile
     # (dns-healthcheck) from the same registry host.
@@ -53,9 +53,9 @@ build:arm64:
 
 .test-template:
   stage: test
-  image: docker:29.9.3@sha256:08a98015fce594af7c382883bea080ea206de74402a95da9dc52b6428c8cd121
+  image: docker:29.10.0@sha256:4bbc7223f81db790097c6dea42fb93e05b8fead4f0431fbe6ccaba6e8473201c
   services:
-    - docker:29.9.3-dind@sha256:08a98015fce594af7c382883bea080ea206de74402a95da9dc52b6428c8cd121
+    - docker:29.10.0-dind@sha256:4bbc7223f81db790097c6dea42fb93e05b8fead4f0431fbe6ccaba6e8473201c
   before_script:
     - |
       if [ -n "$CI_REGISTRY_PASSWORD" ]; then
@@ -88,9 +88,9 @@ test:arm64:
 
 publish:
   stage: publish
-  image: docker:29.9.3@sha256:08a98015fce594af7c382883bea080ea206de74402a95da9dc52b6428c8cd121
+  image: docker:29.10.0@sha256:4bbc7223f81db790097c6dea42fb93e05b8fead4f0431fbe6ccaba6e8473201c
   services:
-    - docker:29.9.3-dind@sha256:08a98015fce594af7c382883bea080ea206de74402a95da9dc52b6428c8cd121
+    - docker:29.10.0-dind@sha256:4bbc7223f81db790097c6dea42fb93e05b8fead4f0431fbe6ccaba6e8473201c
   rules:
     - if: '$CI_COMMIT_TAG'
   needs:
